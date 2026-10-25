@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JajanKu – Catatan Usaha Jajanan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">🔥 <span>JAJANKU</span></div>
+    <nav id="nav">
+      <button data-view="beranda" class="on"><span>Beranda</span></button>
+      <button data-view="produk"><span>Produk & Stok</span></button>
+      <button data-view="kasir"><span>Kasir</span></button>
+      <button data-view="laporan"><span>Laporan</span></button>
+      <button data-view="utang"><span>Utang & Piutang</span></button>
+      <button data-view="pengaturan"><span>Pengaturan</span></button>
+    </nav>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div><b id="shopName">Toko</b><small id="shopType"></small></div>
+      <small id="today"></small>
+    </header>
+
+    <!-- BERANDA -->
+    <section class="view on" id="v-beranda">
+      <h1 id="greet">Halo!</h1>
+      <p class="lead">Ringkasan jualan jajanmu hari ini.</p>
+      <div class="cards">
+        <div class="card"><small>Penjualan hari ini</small><b id="d-sales">Rp0</b><em id="d-count"></em></div>
+        <div class="card"><small>Laba bersih hari ini</small><b id="d-profit">Rp0</b><em>Setelah dikurangi pengeluaran</em></div>
+        <div class="card"><small>Stok menipis</small><b id="d-low">0 produk</b><em>Stok 5 atau kurang</em></div>
+        <div class="card"><small>Piutang belum lunas</small><b id="d-debt">Rp0</b><em>Uang yang belum kamu terima</em></div>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h2>Penjualan 7 hari terakhir</h2>
+          <div class="chart" id="chart"></div>
+        </div>
+        <div class="box">
+          <h2>Jajan paling laku</h2>
+          <ol class="rank" id="best"></ol>
+          <h2 class="mt">Perlu dicek</h2>
+          <ul class="alerts" id="alerts"></ul>
+        </div>
+      </div>
+      <div class="box">
+        <h2>Transaksi terbaru</h2>
+        <div class="scroll"><table><thead><tr><th>ID</th><th>Waktu</th><th>Item</th><th class="r">Total</th></tr></thead><tbody id="recent"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- PRODUK -->
+    <section class="view" id="v-produk">
+      <div class="head"><div><h1>Produk & Stok</h1><p class="lead">Atur harga modal, harga jual, dan jumlah stok.</p></div>
+        <button class="btn" id="addProduct">＋ Tambah produk</button></div>
+      <div class="tools">
+        <input id="pSearch" type="search" placeholder="Cari produk…">
+        <select id="pFilter"><option value="all">Semua stok</option><option value="low">Stok menipis</option></select>
+      </div>
+      <div class="box scroll"><table><thead><tr><th>Produk</th><th>Kategori</th><th class="r">Modal</th><th class="r">Jual</th><th class="r">Stok</th><th>Aksi</th></tr></thead><tbody id="pBody"></tbody></table></div>
+      <p class="hint">Stok berkurang otomatis saat transaksi kasir disimpan.</p>
+    </section>
+
+    <!-- KASIR -->
+    <section class="view" id="v-kasir">
+      <h1>Kasir</h1><p class="lead">Ketuk jajan untuk menambah ke keranjang.</p>
+      <div class="pos">
+        <div class="box">
+          <input id="kSearch" type="search" placeholder="Cari jajan…">
+          <div class="items" id="kItems"></div>
+        </div>
+        <div class="box cart">
+          <h2>Keranjang <small id="cartCount">0 item</small></h2>
+          <div id="cartList" class="cartlist"></div>
+          <dl>
+            <div><dt>Subtotal</dt><dd id="c-sub">Rp0</dd></div>
+            <div><dt><label for="c-disc">Diskon (Rp)</label></dt><dd><input id="c-disc" class="money" inputmode="numeric" placeholder="0"></dd></div>
+            <div class="sum"><dt>Total bayar</dt><dd id="c-total">Rp0</dd></div>
+            <div><dt><label for="c-paid">Uang diterima</label></dt><dd><input id="c-paid" class="money" inputmode="numeric" placeholder="0"></dd></div>
+            <div><dt>Kembalian</dt><dd id="c-change">Rp0</dd></div>
+          </dl>
+          <div class="btnrow"><button class="btn ghost" id="clearCart">Kosongkan</button><button class="btn" id="saveSale">Simpan transaksi</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LAPORAN -->
+    <section class="view" id="v-laporan">
+      <div class="head"><div><h1>Laporan</h1><p class="lead">Untung rugi dari transaksi yang tercatat.</p></div>
+        <div class="tools"><select id="rPeriod"><option value="1">Hari ini</option><option value="7">7 hari terakhir</option><option value="30">30 hari terakhir</option><option value="0">Semua</option></select>
+        <button class="btn ghost" id="csv">⇩ Unduh CSV</button></div></div>
+      <div class="cards five">
+        <div class="card"><small>Penjualan</small><b id="r-sales">Rp0</b></div>
+        <div class="card"><small>Modal barang</small><b id="r-cost">Rp0</b></div>
+        <div class="card"><small>Laba kotor</small><b id="r-gross">Rp0</b></div>
+        <div class="card"><small>Pengeluaran</small><b id="r-exp">Rp0</b></div>
+        <div class="card hl"><small>Laba bersih</small><b id="r-net">Rp0</b></div>
+      </div>
+      <div class="grid2">
+        <div class="box"><h2>Riwayat transaksi</h2>
+          <div class="scroll"><table><thead><tr><th>ID</th><th>Waktu</th><th>Rincian</th><th class="r">Total</th><th class="r">Laba</th></tr></thead><tbody id="rBody"></tbody></table></div></div>
+        <div class="box"><h2>Catat pengeluaran</h2>
+          <form id="expForm" class="form">
+            <label>Keperluan<input id="e-name" required placeholder="Minyak goreng, plastik, gas…"></label>
+            <label>Jumlah (Rp)<input id="e-amt" class="money" inputmode="numeric" required placeholder="25.000"></label>
+            <button class="btn">Tambah pengeluaran</button>
+          </form>
+          <ul class="explist" id="expList"></ul></div>
+      </div>
+    </section>
+
+    <!-- UTANG -->
+    <section class="view" id="v-utang">
+      <div class="head"><div><h1>Utang & Piutang</h1><p class="lead">Catat yang ngutang jajan dan utang ke pemasok.</p></div>
+        <button class="btn" id="addDebt">＋ Tambah catatan</button></div>
+      <div class="cards two">
+        <div class="card"><small>Piutang (harus diterima)</small><b id="u-in">Rp0</b></div>
+        <div class="card"><small>Utang (harus dibayar)</small><b id="u-out">Rp0</b></div>
+      </div>
+      <div class="box scroll"><table><thead><tr><th>Nama</th><th>Jenis</th><th>Jatuh tempo</th><th class="r">Jumlah</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="uBody"></tbody></table></div>
+    </section>
+
+    <!-- PENGATURAN -->
+    <section class="view" id="v-pengaturan">
+      <h1>Pengaturan</h1><p class="lead">Profil toko dan data aplikasi.</p>
+      <div class="grid2">
+        <div class="box"><h2>Profil toko</h2>
+          <form id="setForm" class="form">
+            <label>Nama toko<input id="s-name" required></label>
+            <label>Jenis usaha<input id="s-type"></label>
+            <label>Nama pemilik<input id="s-owner"></label>
+            <button class="btn">Simpan pengaturan</button>
+          </form></div>
+        <div class="box"><h2>Data</h2>
+          <p class="hint">Data tersimpan di browser perangkat ini. Unduh cadangan secara berkala.</p>
+          <div class="btnrow"><button class="btn ghost" id="export">⇩ Unduh cadangan JSON</button><button class="btn danger" id="reset">Reset data</button></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlgProduct">
+  <form id="pForm" class="form">
+    <h2 id="pTitle">Tambah produk</h2>
+    <label>Nama produk<input id="p-name" required placeholder="Contoh: Risoles Ayam"></label>
+    <div class="two-col">
+      <label>Kategori<select id="p-cat"><option>Gorengan</option><option>Kue basah</option><option>Minuman</option><option>Snack kemasan</option><option>Lainnya</option></select></label>
+      <label>Stok<input id="p-stock" type="number" min="0" required value="0"></label>
+    </div>
+    <div class="two-col">
+      <label>Harga modal (Rp)<input id="p-buy" class="money" inputmode="numeric" required></label>
+      <label>Harga jual (Rp)<input id="p-sell" class="money" inputmode="numeric" required></label>
+    </div>
+    <div class="btnrow"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn">Simpan produk</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlgDebt">
+  <form id="dForm" class="form">
+    <h2>Tambah catatan</h2>
+    <label>Nama pelanggan / pemasok<input id="d-name" required></label>
+    <div class="two-col">
+      <label>Jenis<select id="d-type"><option value="piutang">Piutang pelanggan</option><option value="utang">Utang pemasok</option></select></label>
+      <label>Jumlah (Rp)<input id="d-amt" class="money" inputmode="numeric" required></label>
+    </div>
+    <label>Jatuh tempo<input id="d-due" type="date"></label>
+    <div class="btnrow"><button type="button" class="btn ghost" data-close>Batal</button><button class="btn">Simpan catatan</button></div>
+  </form>
+</dialog>
+
+<div id="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
